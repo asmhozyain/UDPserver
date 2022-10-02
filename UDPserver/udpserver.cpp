@@ -1,4 +1,7 @@
 // Server side implementation of UDP client-server model
+#include <iostream>
+#include <string>
+#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -44,16 +47,22 @@ int main() {
     socklen_t len;
 	
 	len = sizeof(cliaddr); //len is value/result
+	while (true)
+	{
+		recvfrom(sockfd, (char*)buffer, MAXLINE, MSG_WAITALL, (struct sockaddr*)&cliaddr, &len);
+		std::cout << "Client: " << buffer << std::endl;
+		//buffer[n] = '\0';
+		//printf("Client : %s\n", buffer);
+
+		std::string str;
+		str.clear();
+		std::getline(std::cin, str);
+
+		sendto(sockfd, str.c_str(), strlen(str), MSG_CONFIRM, (const struct sockaddr*)&cliaddr, len);
+		std::cout << "Server: " << str << std::endl;
+		//printf("Hello message sent.\n");
+	}
 	
-	n = recvfrom(sockfd, (char *)buffer, MAXLINE,
-				MSG_WAITALL, ( struct sockaddr *) &cliaddr,
-				&len);
-	buffer[n] = '\0';
-	printf("Client : %s\n", buffer);
-	sendto(sockfd, (const char *)hello, strlen(hello),
-		MSG_CONFIRM, (const struct sockaddr *) &cliaddr,
-			len);
-	printf("Hello message sent.\n");
 		
 	return 0;
 }

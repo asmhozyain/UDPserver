@@ -36,20 +36,19 @@ int main() {
 		
 	int n;
     socklen_t len;
-    std::string str;
     while (true)
     {
+		std::string str;
+		str.clear();
         std::getline(std::cin, str);
-        sendto(sockfd, str.c_str(), strlen(str),
-		MSG_CONFIRM, (const struct sockaddr *) &servaddr,
-			sizeof(servaddr));
-	printf("Hello message sent.\n");
+        sendto(sockfd, str.c_str(), strlen(str), MSG_CONFIRM, (const struct sockaddr *) &servaddr, sizeof(servaddr));
+		std::cout << "Client: " << str << std::endl;
+		//printf("Hello message sent.\n");
 			
-	n = recvfrom(sockfd, (char *)buffer, MAXLINE,
-				MSG_WAITALL, (struct sockaddr *) &servaddr,
-				&len);
-	buffer[n] = '\0';
-	printf("Server : %s\n", buffer);
+		recvfrom(sockfd, (char *)buffer, MAXLINE, MSG_WAITALL, (struct sockaddr *) &servaddr, &len);
+		std::cout << "Server: " << buffer << std::endl;
+		//buffer[n] = '\0';
+		//printf("Server : %s\n", buffer);
     }
     
 		
